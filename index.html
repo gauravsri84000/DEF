@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GS Cleanse Studio Pro | Designed & Developed by Gaurav Srivastav</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --site-bg: #edf2f7;
+      --panel-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      
+      --brand-blue: #2563eb;
+      --brand-indigo: #4f46e5;
+      --brand-teal: #0d9488;
+      
+      --exact-cell-bg: #dcfce7;
+      --exact-accent: #16a34a;
+      --exact-text: #14532d;
+      
+      --fuzzy-cell-bg: #fef9c3;
+      --fuzzy-accent: #ca8a04;
+      --fuzzy-text: #713f12;
+      
+      --danger-bg: #fee2e2;
+      --danger-text: #991b1b;
+      --danger-border: #fecaca;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background-color: var(--site-bg);
+      color: var(--text-dark);
+      padding: 24px 32px 16px 32px;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      max-width: 1540px;
+      width: 100%;
+      margin: 0 auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Header Styling */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel-bg);
+      padding: 18px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+    }
+
+    .brand-title h1 {
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      font-size: 11px;
+      background: #eff6ff;
+      color: var(--brand-blue);
+      border: 1px solid #bfdbfe;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .brand-title p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .metric-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .metric-pill {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .metric-pill strong { font-size: 16px; }
+    .pill-exact strong { color: var(--exact-accent); }
+    .pill-fuzzy strong { color: var(--fuzzy-accent); }
+
+    /* Upper Workspace Grid */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--panel-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: #ffffff;
+      outline: none;
+      resize: vertical;
+    }
+
+    textarea:focus { border-color: var(--brand-blue); }
+
+    .file-input-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .checkbox-box {
+      max-height: 105px;
+      overflow-y: auto;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-item input { accent-color: var(--brand-blue); }
+
+    .config-controls {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .field-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-block label {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    select {
+      padding: 8px 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      background: #ffffff;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary { background: var(--brand-blue); color: #ffffff; }
+    .btn-primary:hover { background: #1d4ed8; }
+
+    .btn-outline { background: #ffffff; border-color: var(--card-border); color: var(--text-dark); }
+    .btn-outline:hover { background: #f8fafc; }
+
+    .btn-teal { background: var(--brand-teal); color: #ffffff; }
+    .btn-teal:hover { background: #0f766e; }
+
+    .btn-indigo { background: var(--brand-indigo); color: #ffffff; }
+    .btn-indigo:hover { background: #4338ca; }
+
+    .btn-sky { background: #0284c7; color: #ffffff; }
+    .btn-sky:hover { background: #0369a1; }
+
+    .btn-danger { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger-border); }
+    .btn-danger:hover { background: #fca5a5; }
+
+    /* Transforms Panel */
+    .transforms-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+    }
+
+    .transforms-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .scope-selector-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .scope-selector {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-dark);
+      background: #f1f5f9;
+      padding: 5px 12px;
+      border-radius: 6px;
+    }
+
+    .scope-selector label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .scope-selector input { accent-color: var(--brand-blue); }
+
+    .column-target-selector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .column-target-selector select {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .transforms-toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* Results Table Card */
+    .data-sheet-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+    }
+
+    .action-toolbar {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .filter-btn.active {
+      background: var(--text-dark);
+      color: #ffffff;
+      border-color: var(--text-dark);
+    }
+
+    .legend-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: 6px;
+    }
+
+    .legend-marker {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    .table-container {
+      max-height: 520px;
+      overflow: auto;
+      background: #ffffff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      background: #ffffff;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--card-border);
+      border-right: 1px solid #f1f5f9;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    td {
+      padding: 8px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      border-right: 1px solid #f1f5f9;
+      white-space: nowrap;
+      background: #ffffff;
+      color: var(--text-dark);
+    }
+
+    /* Selected Row highlight */
+    tr.row-selected td {
+      background-color: #eff6ff !important;
+    }
+
+    /* Target Evaluated Column Highlighting */
+    td.highlight-exact {
+      background-color: var(--exact-cell-bg) !important;
+      color: var(--exact-text) !important;
+      font-weight: 600;
+      border-left: 3px solid var(--exact-accent);
+    }
+
+    td.highlight-fuzzy {
+      background-color: var(--fuzzy-cell-bg) !important;
+      color: var(--fuzzy-text) !important;
+      font-weight: 600;
+      border-left: 3px solid var(--fuzzy-accent);
+    }
+
+    .group-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .group-pill-exact {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+    }
+
+    .group-pill-fuzzy {
+      background: #fefce8;
+      border: 1px solid #fef08a;
+      color: #854d0e;
+    }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .badge-original {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    .badge-exact { background: var(--exact-cell-bg); color: var(--exact-text); border: 1px solid #86efac; }
+    .badge-fuzzy { background: var(--fuzzy-cell-bg); color: var(--fuzzy-text); border: 1px solid #fde047; }
+    .badge-unique { color: #94a3b8; font-weight: 500; }
+
+    .btn-delete-row {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .btn-delete-row:hover { background: var(--danger-bg); }
+
+    .empty-state {
+      padding: 44px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    footer {
+      margin-top: 16px;
+      padding: 16px 0 8px 0;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .footer-link {
+      color: var(--brand-blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <header>
+    <div class="brand-title">
+      <h1>GS Cleanse Studio Pro <span class="brand-badge">Enterprise Edition</span></h1>
+      <p>Designed and developed by Gaurav Srivastav</p>
+    </div>
+    <div class="metric-group">
+      <div class="metric-pill">Total: <strong id="statTotal">0</strong></div>
+      <div class="metric-pill pill-exact">Exact: <strong id="statExact">0</strong></div>
+      <div class="metric-pill pill-fuzzy">Fuzzy: <strong id="statFuzzy">0</strong></div>
+    </div>
+  </header>
+
+  <div class="workspace-grid">
+    <div class="card">
+      <div class="card-top">
+        <span class="card-title">Dataset Entry</span>
+        <button class="btn btn-outline" style="padding: 3px 8px; font-size: 11px;" onclick="clearAllData()">Reset Canvas</button>
+      </div>
+      <textarea id="pasteInput" placeholder="Paste data directly from Excel (Ctrl+V)..."></textarea>
+      <div class="file-input-bar">
+        <span>Workbook File (.xlsx, .xls, .csv):</span>
+        <input type="file" id="uploadInput" accept=".xlsx, .xls, .csv" />
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="card-title">Deduplication Rules</span>
+        <span style="font-size: 11px; color: var(--brand-blue); cursor: pointer;" onclick="toggleAllColumns()">Toggle All</span>
+      </div>
+
+      <div class="field-block">
+        <label>Select Columns to Match</label>
+        <div class="checkbox-box" id="columnCheckboxes">
+          <span style="color: var(--text-muted); font-size: 12px;">No dataset loaded. Paste rows or upload file.</span>
+        </div>
+      </div>
+
+      <div class="config-controls">
+        <div class="field-block">
+          <label for="fuzzyPreset">Fuzzy Sensitivity</label>
+          <select id="fuzzyPreset" onchange="processDuplicates()">
+            <option value="25">25% (Broad Match)</option>
+            <option value="50">50% (Standard Loose)</option>
+            <option value="75" selected>75% (High Precision)</option>
+            <option value="100">100% (Strict Exact Only)</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="flex: 1;" onclick="processDuplicates()">Find Duplicates</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Data Transforms Ribbon -->
+  <div class="transforms-card">
+    <div class="transforms-header">
+      <span class="card-title">Transformation Engine</span>
+      
+      <div class="scope-selector-container">
+        <div class="scope-selector">
+          <span>Apply To:</span>
+          <label><input type="radio" name="transformScope" value="all" checked> Entire Sheet</label>
+          <label><input type="radio" name="transformScope" value="selected-col"> Target Column Only</label>
+        </div>
+
+        <div class="column-target-selector">
+          <select id="transformTargetColSelect">
+            <option value="-1">All Columns</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="transforms-toolbar">
+      <button class="btn btn-teal" onclick="applyWhitespaceTrim()">Trim Spaces</button>
+      <button class="btn btn-indigo" onclick="applyCapitalizeNames()">Proper Case Names (First & Last)</button>
+      <button class="btn btn-sky" onclick="applyLowercaseEmails()">Lowercase Emails</button>
+      <button class="btn btn-action" style="background:#475569; color:#fff;" onclick="applyRemoveBlankRows()">Remove Blank Lines</button>
+      <button class="btn btn-danger" onclick="revertTransform()">Undo Last Transform</button>
+      <button class="btn btn-outline" onclick="resetToOriginal()">Reset All Transforms</button>
+    </div>
+  </div>
+
+  <div class="data-sheet-card">
+    <div class="action-toolbar">
+      <div class="toolbar-left">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All Rows</button>
+        <button class="filter-btn" onclick="setFilter('duplicates', this)">All Duplicates</button>
+        <button class="filter-btn" onclick="setFilter('exact', this)">Exact Only</button>
+        <button class="filter-btn" onclick="setFilter('fuzzy', this)">Fuzzy Only</button>
+        <button class="btn btn-danger" onclick="deleteDuplicateRows()" style="padding: 5px 12px; font-size: 12px;">Delete Duplicates (Keep 1st Primary)</button>
+      </div>
+
+      <div class="toolbar-right">
+        <div class="legend-box">
+          <span><span class="legend-marker" style="background:var(--exact-cell-bg); border:1px solid var(--exact-accent);"></span>Exact Match</span>
+          <span><span class="legend-marker" style="background:var(--fuzzy-cell-bg); border:1px solid var(--fuzzy-accent);"></span>Fuzzy Match</span>
+        </div>
+        <button class="btn btn-outline" onclick="copyTableToClipboard()">Copy Clean Table</button>
+        <button class="btn btn-outline" onclick="exportToExcel()">Save as Excel (.xlsx)</button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead id="tblHead">
+          <tr>
+            <th style="width: 35px;"><input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllRows(this)"></th>
+            <th style="width: 40px;">#</th>
+            <th style="width: 110px;">Group Match</th>
+            <th style="width: 155px;">Status & Pair</th>
+            <th style="width: 60px;">Action</th>
+            <th>Data Grid</th>
+          </tr>
+        </thead>
+        <tbody id="tblBody">
+          <tr>
+            <td colspan="6" class="empty-state">Paste rows or upload an Excel sheet to begin.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <div>&copy; 2026 <strong>Gaurav Srivastav</strong>. All rights reserved. | GS Cleanse Studio Pro</div>
+    <div>
+      Connect on LinkedIn: 
+      <a class="footer-link" href="https://www.linkedin.com/in/gaurav84000/" target="_blank" rel="noopener noreferrer">
+        linkedin.com/in/gaurav84000
+      </a>
+    </div>
+  </footer>
+</div>
+
+<script>
+  let rawSheetData = [];
+  let originalSnapshot = [];
+  let historyStack = [];
+  let selectedRowIndices = new Set();
+  let evaluatedRows = [];
+  let currentActiveFilter = 'all';
+
+  document.getElementById('uploadInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const data = new Uint8Array(evt.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+      rawSheetData = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: "" });
+      originalSnapshot = JSON.parse(JSON.stringify(rawSheetData));
+      historyStack = [];
+      selectedRowIndices.clear();
+      buildColumnSelectors();
+      processDuplicates();
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
+  document.getElementById('pasteInput').addEventListener('input', function() {
+    const text = this.value.trim();
+    if (!text) {
+      clearAllData();
+      return;
+    }
+    rawSheetData = text.split('\n').map(line => line.split('\t'));
+    originalSnapshot = JSON.parse(JSON.stringify(rawSheetData));
+    historyStack = [];
+    selectedRowIndices.clear();
+    buildColumnSelectors();
+    processDuplicates();
+  });
+
+  function buildColumnSelectors() {
+    const container = document.getElementById('columnCheckboxes');
+    const transformColSelect = document.getElementById('transformTargetColSelect');
+    container.innerHTML = '';
+    transformColSelect.innerHTML = '<option value="-1">All Columns</option>';
+
+    if (!rawSheetData || rawSheetData.length === 0) {
+      container.innerHTML = '<span style="color:var(--text-muted); font-size:12px;">No dataset loaded. Paste rows or upload file.</span>';
+      return;
+    }
+
+    const firstRow = rawSheetData[0];
+    firstRow.forEach((colTitle, idx) => {
+      const cleanTitle = colTitle && colTitle.toString().trim() ? colTitle.toString().trim() : `Column ${idx + 1}`;
+
+      // Populate Matching Rule Checkbox
+      const label = document.createElement('label');
+      label.className = 'checkbox-item';
+      label.innerHTML = `
+        <input type="checkbox" value="${idx}" ${idx === 0 ? 'checked' : ''} onchange="processDuplicates()" />
+        <span>${cleanTitle} <span style="color:var(--text-muted); font-size:11px;">(Col ${idx + 1})</span></span>
+      `;
+      container.appendChild(label);
+
+      // Populate Transform Target Column Dropdown
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `${cleanTitle} (Col ${idx + 1})`;
+      transformColSelect.appendChild(opt);
+    });
+  }
+
+  function toggleAllColumns() {
+    const checkboxes = document.querySelectorAll('#columnCheckboxes input[type="checkbox"]');
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+    checkboxes.forEach(cb => cb.checked = !allChecked);
+    processDuplicates();
+  }
+
+  function getCheckedColumns() {
+    const checkboxes = document.querySelectorAll('#columnCheckboxes input[type="checkbox"]:checked');
+    return Array.from(checkboxes).map(cb => parseInt(cb.value, 10));
+  }
+
+  function sanitize(val) {
+    if (!val) return "";
+    return val.toString().trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  function computeLevenshtein(s1, s2) {
+    if (s1 === s2) return 1.0;
+    if (!s1 || !s2) return 0.0;
+
+    const len1 = s1.length;
+    const len2 = s2.length;
+    const maxLen = Math.max(len1, len2);
+    if (maxLen === 0) return 1.0;
+
+    const d = [];
+    for (let i = 0; i <= len1; i++) d[i] = [i];
+    for (let j = 0; j <= len2; j++) d[0][j] = j;
+
+    for (let i = 1; i <= len1; i++) {
+      for (let j = 1; j <= len2; j++) {
+        const cost = s1.charAt(i - 1) === s2.charAt(j - 1) ? 0 : 1;
+        d[i][j] = Math.min(
+          d[i - 1][j] + 1,
+          d[i][j - 1] + 1,
+          d[i - 1][j - 1] + cost
+        );
+      }
+    }
+    return (maxLen - d[len1][len2]) / maxLen;
+  }
+
+  function processDuplicates() {
+    if (!rawSheetData || rawSheetData.length === 0) {
+      renderTable([]);
+      return;
+    }
+
+    const selectedCols = getCheckedColumns();
+    const thresholdPreset = parseInt(document.getElementById('fuzzyPreset').value, 10);
+    const threshold = thresholdPreset / 100;
+
+    const records = rawSheetData.map((row, idx) => {
+      const parts = selectedCols.map(c => sanitize(row[c]));
+      return {
+        id: idx,
+        rowNumber: idx + 1,
+        rowData: row,
+        signature: parts.join(' | '),
+        hasContent: parts.some(p => p.length > 0),
+        groupId: null,
+        isPrimary: false, // First matching row stays primary
+        matchType: null,
+        matchedWithRow: null,
+        score: 0
+      };
+    });
+
+    let currentGroupCounter = 1;
+    let exactRowCount = 0;
+    let fuzzyRowCount = 0;
+
+    for (let i = 0; i < records.length; i++) {
+      if (!records[i].hasContent) continue;
+
+      for (let j = i + 1; j < records.length; j++) {
+        if (!records[j].hasContent) continue;
+
+        const isExact = records[i].signature === records[j].signature;
+        let isFuzzy = false;
+        let simScore = 0;
+
+        if (!isExact && threshold < 1.0) {
+          simScore = computeLevenshtein(records[i].signature, records[j].signature);
+          if (simScore >= threshold) {
+            isFuzzy = true;
+          }
+        }
+
+        if (isExact || isFuzzy) {
+          const type = isExact ? 'exact' : 'fuzzy';
+
+          let targetGroup = records[i].groupId || records[j].groupId;
+          if (!targetGroup) {
+            const prefix = isExact ? 'GRP-EX' : 'GRP-FZ';
+            targetGroup = `${prefix}-${String(currentGroupCounter).padStart(3, '0')}`;
+            currentGroupCounter++;
+            records[i].isPrimary = true; // Mark first original entry
+          }
+
+          records[i].groupId = targetGroup;
+          records[j].groupId = targetGroup;
+
+          if (!records[i].matchType) {
+            records[i].matchType = type;
+            records[i].matchedWithRow = records[j].rowNumber;
+          }
+
+          records[j].matchType = type;
+          records[j].matchedWithRow = records[i].rowNumber;
+          records[j].score = isExact ? 1.0 : simScore;
+        }
+      }
+    }
+
+    records.forEach(r => {
+      if (r.groupId && !r.isPrimary) {
+        if (r.matchType === 'exact') exactRowCount++;
+        else if (r.matchType === 'fuzzy') fuzzyRowCount++;
+      }
+    });
+
+    document.getElementById('statTotal').innerText = records.length;
+    document.getElementById('statExact').innerText = exactRowCount;
+    document.getElementById('statFuzzy').innerText = fuzzyRowCount;
+
+    evaluatedRows = records;
+    renderTable(records, selectedCols);
+  }
+
+  function renderTable(records, targetCols = []) {
+    const thead = document.getElementById('tblHead');
+    const tbody = document.getElementById('tblBody');
+
+    if (!records || records.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state">Paste rows or upload an Excel sheet to begin.</td></tr>`;
+      return;
+    }
+
+    let maxCols = 0;
+    records.forEach(r => {
+      if (r.rowData.length > maxCols) maxCols = r.rowData.length;
+    });
+
+    let headerHTML = `<tr>
+      <th style="width: 35px;"><input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllRows(this)"></th>
+      <th style="width: 40px;">#</th>
+      <th style="width: 110px;">Group Match</th>
+      <th style="width: 155px;">Status & Pair</th>
+      <th style="width: 60px;">Action</th>`;
+    for (let c = 0; c < maxCols; c++) {
+      const isChecked = targetCols.includes(c);
+      headerHTML += `<th>Col ${c + 1} ${isChecked ? '<span style="color:var(--brand-blue);">(Target)</span>' : ''}</th>`;
+    }
+    headerHTML += `</tr>`;
+    thead.innerHTML = headerHTML;
+
+    let visibleRows = records;
+    if (currentActiveFilter === 'duplicates') {
+      visibleRows = records.filter(r => r.groupId !== null);
+    } else if (currentActiveFilter === 'exact') {
+      visibleRows = records.filter(r => r.matchType === 'exact');
+    } else if (currentActiveFilter === 'fuzzy') {
+      visibleRows = records.filter(r => r.matchType === 'fuzzy');
+    }
+
+    if (visibleRows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="${maxCols + 5}" class="empty-state">No matching rows found for the selected view.</td></tr>`;
+      return;
+    }
+
+    let bodyHTML = '';
+    visibleRows.forEach(r => {
+      const isRowSelected = selectedRowIndices.has(r.id);
+      let groupDisplay = `<span style="color:#cbd5e1;">—</span>`;
+      if (r.groupId) {
+        const isEx = r.groupId.includes('EX');
+        groupDisplay = `<span class="group-pill ${isEx ? 'group-pill-exact' : 'group-pill-fuzzy'}">${r.groupId}</span>`;
+      }
+
+      let badgeHTML = `<span class="status-badge badge-unique">Unique</span>`;
+      if (r.isPrimary) {
+        badgeHTML = `<span class="status-badge badge-original">Primary (1st Kept)</span>`;
+      } else if (r.matchType === 'exact') {
+        const pairInfo = r.matchedWithRow ? `<div style="font-size:10px; color:#15803d; margin-top:2px;">Linked to #${r.matchedWithRow}</div>` : '';
+        badgeHTML = `<span class="status-badge badge-exact">Exact Duplicate</span>${pairInfo}`;
+      } else if (r.matchType === 'fuzzy') {
+        const pct = Math.round(r.score * 100);
+        const pairInfo = r.matchedWithRow ? `<div style="font-size:10px; color:#854d0e; margin-top:2px;">~${pct}% with #${r.matchedWithRow}</div>` : '';
+        badgeHTML = `<span class="status-badge badge-fuzzy">Fuzzy (${pct}%)</span>${pairInfo}`;
+      }
+
+      bodyHTML += `<tr class="${isRowSelected ? 'row-selected' : ''}">
+        <td><input type="checkbox" ${isRowSelected ? 'checked' : ''} onchange="toggleRowSelection(${r.id}, this)"></td>
+        <td style="color:var(--text-muted); font-weight:600;">${r.rowNumber}</td>
+        <td>${groupDisplay}</td>
+        <td>${badgeHTML}</td>
+        <td><button class="btn-delete-row" onclick="deleteSingleRow(${r.id})">Delete</button></td>`;
+
+      for (let c = 0; c < maxCols; c++) {
+        const val = r.rowData[c] !== undefined ? r.rowData[c] : "";
+        let cellClass = "";
+
+        if (targetCols.includes(c)) {
+          if (r.matchType === 'exact') cellClass = 'class="highlight-exact"';
+          else if (r.matchType === 'fuzzy') cellClass = 'class="highlight-fuzzy"';
+        }
+
+        bodyHTML += `<td ${cellClass}>${escapeHTML(val)}</td>`;
+      }
+      bodyHTML += `</tr>`;
+    });
+
+    tbody.innerHTML = bodyHTML;
+  }
+
+  /* ------------------- ROW SELECTION HANDLING ------------------- */
+
+  function toggleRowSelection(rowIdx, checkbox) {
+    if (checkbox.checked) {
+      selectedRowIndices.add(rowIdx);
+    } else {
+      selectedRowIndices.delete(rowIdx);
+    }
+    renderTable(evaluatedRows, getCheckedColumns());
+  }
+
+  function toggleSelectAllRows(masterCheckbox) {
+    if (masterCheckbox.checked) {
+      evaluatedRows.forEach(r => selectedRowIndices.add(r.id));
+    } else {
+      selectedRowIndices.clear();
+    }
+    renderTable(evaluatedRows, getCheckedColumns());
+  }
+
+  function pushHistory() {
+    historyStack.push(JSON.parse(JSON.stringify(rawSheetData)));
+  }
+
+  /* ------------------- TARGETED COLUMN / SCOPE LOGIC ------------------- */
+
+  function isCellInTransformScope(colIdx) {
+    const scope = document.querySelector('input[name="transformScope"]:checked').value;
+    if (scope === 'all') return true;
+    
+    const targetCol = parseInt(document.getElementById('transformTargetColSelect').value, 10);
+    if (targetCol === -1) return true; // All columns option inside dropdown
+    return colIdx === targetCol;
+  }
+
+  // 1. Trim Extra Spaces
+  function applyWhitespaceTrim() {
+    if (!rawSheetData || rawSheetData.length === 0) return;
+    pushHistory();
+
+    rawSheetData = rawSheetData.map(row => {
+      return row.map((cell, colIdx) => {
+        if (isCellInTransformScope(colIdx) && typeof cell === 'string') {
+          return cell.trim().replace(/\s+/g, ' ');
+        }
+        return cell;
+      });
+    });
+    processDuplicates();
+  }
+
+  // 2. Capitalize First & Last word of Name (Only for selected scope/column)
+  function applyCapitalizeNames() {
+    if (!rawSheetData || rawSheetData.length === 0) return;
+    pushHistory();
+
+    rawSheetData = rawSheetData.map(row => {
+      return row.map((cell, colIdx) => {
+        if (isCellInTransformScope(colIdx) && typeof cell === 'string') {
+          return cell.trim().toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+        }
+        return cell;
+      });
+    });
+    processDuplicates();
+  }
+
+  // 3. Lowercase Emails only
+  function applyLowercaseEmails() {
+    if (!rawSheetData || rawSheetData.length === 0) return;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    pushHistory();
+
+    rawSheetData = rawSheetData.map(row => {
+      return row.map((cell, colIdx) => {
+        if (isCellInTransformScope(colIdx) && typeof cell === 'string') {
+          const trimmed = cell.trim();
+          if (emailRegex.test(trimmed) || trimmed.includes('@')) {
+            return trimmed.toLowerCase();
+          }
+        }
+        return cell;
+      });
+    });
+    processDuplicates();
+  }
+
+  // 4. Remove completely blank lines / rows
+  function applyRemoveBlankRows() {
+    if (!rawSheetData || rawSheetData.length === 0) return;
+    pushHistory();
+
+    rawSheetData = rawSheetData.filter(row => 
+      row.some(cell => cell !== null && cell !== undefined && cell.toString().trim() !== "")
+    );
+    selectedRowIndices.clear();
+    processDuplicates();
+  }
+
+  // 5. Undo Last Transform
+  function revertTransform() {
+    if (historyStack.length === 0) {
+      alert("No previous transform state to undo.");
+      return;
+    }
+    rawSheetData = historyStack.pop();
+    processDuplicates();
+  }
+
+  // 6. Reset All Transforms
+  function resetToOriginal() {
+    if (originalSnapshot.length === 0) return;
+    pushHistory();
+    rawSheetData = JSON.parse(JSON.stringify(originalSnapshot));
+    processDuplicates();
+  }
+
+  /* ------------------- ACTIONS & EXPORTS ------------------- */
+
+  function deleteSingleRow(recordId) {
+    pushHistory();
+    rawSheetData.splice(recordId, 1);
+    selectedRowIndices.delete(recordId);
+    processDuplicates();
+  }
+
+  // SMART DELETE: Keeps the first primary record intact, deletes secondary duplicates
+  function deleteDuplicateRows() {
+    if (!evaluatedRows || evaluatedRows.length === 0) return;
+    
+    const confirmDelete = confirm("Delete duplicate records? Note: The 1st primary record of every match group will be kept safely!");
+    if (!confirmDelete) return;
+
+    pushHistory();
+    // Keep rows that are either unique (groupId === null) OR are marked as Primary (1st original entry)
+    rawSheetData = evaluatedRows
+      .filter(r => r.groupId === null || r.isPrimary === true)
+      .map(r => r.rowData);
+
+    selectedRowIndices.clear();
+    processDuplicates();
+  }
+
+  function setFilter(type, btn) {
+    currentActiveFilter = type;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTable(evaluatedRows, getCheckedColumns());
+  }
+
+  function copyTableToClipboard() {
+    if (!rawSheetData || rawSheetData.length === 0) {
+      alert("No data available to copy.");
+      return;
+    }
+    const tsv = rawSheetData.map(row => row.join('\t')).join('\n');
+    navigator.clipboard.writeText(tsv).then(() => {
+      alert("Clean table copied to clipboard in Excel-ready format!");
+    });
+  }
+
+  function exportToExcel() {
+    if (!rawSheetData || rawSheetData.length === 0) {
+      alert("No data to export.");
+      return;
+    }
+    const worksheet = XLSX.utils.aoa_to_sheet(rawSheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sanitized_Data");
+    XLSX.writeFile(workbook, "GS_Cleaned_Dataset.xlsx");
+  }
+
+  function clearAllData() {
+    document.getElementById('pasteInput').value = '';
+    document.getElementById('uploadInput').value = '';
+    rawSheetData = [];
+    originalSnapshot = [];
+    historyStack = [];
+    selectedRowIndices.clear();
+    evaluatedRows = [];
+    document.getElementById('statTotal').innerText = '0';
+    document.getElementById('statExact').innerText = '0';
+    document.getElementById('statFuzzy').innerText = '0';
+    buildColumnSelectors();
+    renderTable([]);
+  }
+
+  function escapeHTML(str) {
+    if (str === null || str === undefined) return '';
+    return str.toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+</script>
+</body>
+</html>
