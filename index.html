@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GS Studio</title>
+  <title>GS Studio Pro</title>
   <!-- SheetJS for Excel & CSV Parsing -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <!-- Chart.js for Advanced Reporting & Survey Doughnut Charts -->
@@ -398,7 +398,7 @@
 <div class="app-container">
   <header>
     <div class="brand-title">
-      <h1>📊 GS Studio</h1>
+      <h1>📊 GS Studio Pro</h1>
     </div>
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab('clean', this)">Data Clean Studio</button>
@@ -517,7 +517,7 @@
   <div id="tabCharts" class="tab-view">
     <div class="dashboard-header-card">
       <div>
-        <h2 style="font-size: 16px; font-weight: 700;">Survey Response & Ratings Analytics Dashboard</h2>
+        <h2 style="font-size: 16px; font-weight: 700;">Feedback Ratings Analytics Dashboard</h2>
         <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Filtered view with dynamic KPI calculations, summary table, and clean chart layout.</p>
       </div>
       <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
@@ -532,7 +532,7 @@
       <div class="field-block" style="max-width: 350px;">
         <label for="courseFilterSelect">Filter by Course Name:</label>
         <select id="courseFilterSelect" onchange="refreshCharts()">
-          <option value="ALL">All Courses / Programs</option>
+          <option value="ALL">All Courses</option>
         </select>
       </div>
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -544,7 +544,7 @@
 
     <!-- Available Questions Checkboxes -->
     <div class="card" style="padding: 14px 20px;">
-      <span class="card-title" style="margin-bottom: 6px;">Available Survey Question Columns</span>
+      <span class="card-title" style="margin-bottom: 6px;">Feedback Ratings Question Columns</span>
       <div class="checkbox-box" id="surveyQuestionCheckboxes" style="max-height: 110px;">
         <span style="color: var(--text-muted); font-size: 12px;">No dataset loaded yet.</span>
       </div>
@@ -598,7 +598,7 @@
   </div>
 
   <footer>
-    <div>GS Studio</div>
+    <div>GS Studio Pro</div>
     <div>Designed and developed by <a class="footer-link" href="https://www.linkedin.com/in/gaurav84000/" target="_blank" rel="noopener noreferrer">Gaurav Srivastav</a></div>
   </footer>
 </div>
